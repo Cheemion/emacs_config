@@ -1,0 +1,17 @@
+# Compiled
+*.elc
+
+# Packaging
+.cask
+
+# Backup files
+*~
+
+# Undo-tree save-files
+*.~undo-tree
+#
+ac-comphist.dat
+auto-save-list
+elpa
+myinit.el
+recentf
