@@ -110,8 +110,8 @@
 (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
 (define-key evil-normal-state-map (kbd "C-n") 'next-line)
-(define-key evil-normal-state-map (kbd "C-a") 'move-beginning-of-line)
-(define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
+;;(define-key evil-normal-state-map (kbd "C-a") 'move-beginning-of-line)
+;(define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
 ;; extra evil functionality, such as press q to quit pop up panel
 (use-package evil-collection
   :after evil
