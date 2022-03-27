@@ -110,9 +110,9 @@
 (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
 (define-key evil-normal-state-map (kbd "C-n") 'next-line)
-;;(define-key evil-normal-state-map (kbd "C-a") 'move-beginning-of-line)
-;(define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
-;; extra evil functionality, such as press q to quit pop up panel
+(define-key evil-normal-state-map (kbd "C-a") 'move-beginning-of-line)
+(define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
+;;extra evil functionality, such as press q to quit pop up panel
 (use-package evil-collection
   :after evil
   :config
@@ -133,5 +133,17 @@
 ;; manage project
 (use-package projectile
   :config (projectile-mode)
+  :custom ((projectile-completion-system 'ivy))
   :bind-keymap
-  ("C-c p" . projectile-command-map))
+  ("C-c p" . projectile-command-map)
+  :init
+  (when (file-directory-p "~/Projects/Code")
+    (setq projectile-project-search-path '("~/Projects/Code")))
+  (setq projectile-switch-project-action #'projectile-dired))
+
+;; git
+(use-package magit
+  :commands (magit-status magit-get-current-branch)
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
