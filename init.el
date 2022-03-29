@@ -3,7 +3,7 @@
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (set-fringe-mode 10) ; Give some breathing room
-(menu-bar-mode -1)
+(menu-bar-mode 1)
 (setq visible-bell t) ; emacs will not bee everyday, but slash bell
 
 
@@ -11,6 +11,7 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-set-key (kbd "<f5>") 'revert-buffer)
+
 ;; show line number
 (global-display-line-numbers-mode t)
 (dolist (mode '(shell-mode-hook
@@ -20,9 +21,11 @@
 ;;Initialize package sources
 (require 'package)
 (setq package-archives '(("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
+			 ("MELPA Stable" . "http://stable.melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
 			 ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
+;;(package-refresh-contents)
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -31,8 +34,6 @@
   (package-install 'use-package))
 (require 'use-package)
 (setq use-package-always-ensure t)
-;;use to record commands, enable the mode and use clm/toggle xxx to show up the commands windows
-;(use-package command-log-mode)
 
 ;; code completion, space could be used, type a s could search alike spin
 (use-package ivy
@@ -112,6 +113,7 @@
 (define-key evil-normal-state-map (kbd "C-n") 'next-line)
 (define-key evil-normal-state-map (kbd "C-a") 'move-beginning-of-line)
 (define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
+(define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
 ;;extra evil functionality, such as press q to quit pop up panel
 (use-package evil-collection
   :after evil
@@ -122,28 +124,54 @@
 (use-package beacon
   :ensure t
   :config
-  (beacon-mode 1))
+    (beacon-mode 1))
 
 ;; expand region
 (use-package expand-region
-  :ensure t
-  :config
-  (global-set-key (kbd "C-=") 'er/expand-region))
+:ensure t
+:config
+(global-set-key (kbd "C-=") 'er/expand-region))
 
+;; syntak check
+;;; On Windows, commands run by flycheck may have CRs (\r\n line endings).
+;;; Strip them out before parsing.
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+
+
+
+
+
+
+
+
+
+
+;; waitting to be explored
 ;; manage project
 (use-package projectile
-  :config (projectile-mode)
-  :custom ((projectile-completion-system 'ivy))
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
-  :init
-  (when (file-directory-p "~/Projects/Code")
+:config (projectile-mode)
+:custom ((projectile-completion-system 'ivy))
+:bind-keymap
+("C-c p" . projectile-command-map)
+:init
+(when (file-directory-p "~/Projects/Code")
     (setq projectile-project-search-path '("~/Projects/Code")))
-  (setq projectile-switch-project-action #'projectile-dired))
+(setq projectile-switch-project-action #'projectile-dired))
 
 ;; git
 (use-package magit
-  :commands (magit-status magit-get-current-branch)
-  :custom
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+:commands (magit-status magit-get-current-branch)
+:custom
+(magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
+;; lsp
+(use-package lsp-mode
+    :hook (c-mode . lsp-deferred)
+    :commands (lsp lsp-deferred)
+    :init
+    (setq lsp-keymap-prefix "C-c l")
+    :config
+    (lsp-enable-which-key-integration t))
