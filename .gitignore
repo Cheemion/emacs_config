@@ -15,3 +15,6 @@ auto-save-list
 elpa
 myinit.el
 recentf
+projectile-bookmarks.eld
+transient/
+.lsp-session-v1
