@@ -1,3 +1,4 @@
+;;; init file
 (setq inhibit-startup-message t)
 (scroll-bar-mode -1) ; Disble visible scrollbar
 (tool-bar-mode 1)
@@ -25,7 +26,6 @@
 			 ("org" . "https://orgmode.org/elpa/")
 			 ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
-;;(package-refresh-contents)
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -35,7 +35,7 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; code completion, space could be used, type a s could search alike spin
+;; words search suggestion, space could be used, type a s could search alike spin
 (use-package ivy
   :bind (("C-s" . swiper)
 	 :map ivy-minibuffer-map
@@ -133,23 +133,11 @@
 (global-set-key (kbd "C-=") 'er/expand-region))
 
 ;; syntak check
-;;; On Windows, commands run by flycheck may have CRs (\r\n line endings).
-;;; Strip them out before parsing.
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
 
 
-
-
-
-
-
-
-
-
-
-;; waitting to be explored
 ;; manage project
 (use-package projectile
 :config (projectile-mode)
@@ -157,8 +145,8 @@
 :bind-keymap
 ("C-c p" . projectile-command-map)
 :init
-(when (file-directory-p "~/Projects/Code")
-    (setq projectile-project-search-path '("~/Projects/Code")))
+(when (file-directory-p "~/projects")
+    (setq projectile-project-search-path '("~/projects")))
 (setq projectile-switch-project-action #'projectile-dired))
 
 ;; git
@@ -168,10 +156,42 @@
 (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
 ;; lsp
+;;pip install 'python-lsp-server[all]'
+;;sudo apt-get install clangd-12
+;;usage C-c l g r and others
 (use-package lsp-mode
-    :hook (c-mode . lsp-deferred)
-    :commands (lsp lsp-deferred)
-    :init
-    (setq lsp-keymap-prefix "C-c l")
-    :config
-    (lsp-enable-which-key-integration t))
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         ;;(python-mode . lsp-deferred)
+         (c++-mode . lsp-deferred)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :custom(lsp-ui-doc-po))
+
+(use-package  lsp-treemacs
+  :after lsp)
+
+;; company
+(use-package company
+  :after lsp-mode
+  :hook (lsp-mode . company-mode))
+
+(add-hook 'after-init-hook 'global-company-mode)
+
+;; commenting
+(use-package evil-nerd-commenter
+  :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+
+;; Yasnippet
+(use-package yasnippet
+  :init
+  (setq yas-snippet-dirs '("~/.emacs.d/my_snippets/"))
+  :config
+  (yas-global-mode 1))
+;;
