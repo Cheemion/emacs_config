@@ -178,10 +178,15 @@
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
   :custom(lsp-ui-doc-po))
-
+;;
 (use-package  lsp-treemacs
   :after lsp)
-
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
 ;; company
 (use-package company
   :after lsp-mode
@@ -221,9 +226,6 @@
             (indent-for-tab-command)))))
 (global-set-key (kbd "M-/") 'tab-indent-or-complete)
 
-;; windows control
-(use-package edwina
-  :ensure t
-  :config
-  (setq display-buffer-base-action '(display-buffer-below-selected))
-  (edwina-mode 1))
+;; Ace windows
+;;(use-package ace-window)
+;;(global-set-key (kbd "M-o") 'ace-window)
