@@ -12,6 +12,12 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-set-key (kbd "<f5>") 'revert-buffer)
+(global-set-key (kbd "S-<up>") 'windmove-up)
+(global-set-key (kbd "S-<down>") 'windmove-down)
+(global-set-key (kbd "S-<right>") 'windmove-right)
+(global-set-key (kbd "S-<left>") 'windmove-left)
+
+
 ;; show line number
 (global-display-line-numbers-mode t)
 (dolist (mode '(shell-mode-hook
@@ -213,5 +219,11 @@
           (if (check-expansion)
               (company-complete-common)
             (indent-for-tab-command)))))
-  (global-set-key (kbd "M-/") 'tab-indent-or-complete)
-;;
+(global-set-key (kbd "M-/") 'tab-indent-or-complete)
+
+;; windows control
+(use-package edwina
+  :ensure t
+  :config
+  (setq display-buffer-base-action '(display-buffer-below-selected))
+  (edwina-mode 1))
