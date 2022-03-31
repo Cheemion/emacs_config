@@ -12,7 +12,6 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-set-key (kbd "<f5>") 'revert-buffer)
-
 ;; show line number
 (global-display-line-numbers-mode t)
 (dolist (mode '(shell-mode-hook
@@ -181,17 +180,38 @@
 (use-package company
   :after lsp-mode
   :hook (lsp-mode . company-mode))
-
 (add-hook 'after-init-hook 'global-company-mode)
 
 ;; commenting
 (use-package evil-nerd-commenter
-  :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+  :bind ("C-c C-c" . evilnc-comment-or-uncomment-lines))
 
 ;; Yasnippet
 (use-package yasnippet
   :init
   (setq yas-snippet-dirs '("~/.emacs.d/my_snippets/"))
   :config
-  (yas-global-mode 1))
+  (yas-global-mode))
+ (defun check-expansion ()
+    (save-excursion
+      (if (looking-at "\\_>") t
+        (backward-char 1)
+        (if (looking-at "\\.") t
+          (backward-char 1)
+          (if (looking-at "->") t nil)))))
+
+  (defun do-yas-expand ()
+    (let ((yas/fallback-behavior 'return-nil))
+      (yas/expand)))
+
+  (defun tab-indent-or-complete ()
+    (interactive)
+    (if (minibufferp)
+        (minibuffer-complete)
+      (if (or (not yas/minor-mode)
+              (null (do-yas-expand)))
+          (if (check-expansion)
+              (company-complete-common)
+            (indent-for-tab-command)))))
+  (global-set-key (kbd "M-/") 'tab-indent-or-complete)
 ;;
