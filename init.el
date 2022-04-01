@@ -6,23 +6,19 @@
 (set-fringe-mode 10) ; Give some breathing room
 (menu-bar-mode 1)
 (setq visible-bell t) ; emacs will not bee everyday, but slash bell
-
-
 ;; Make ESC quit prompts, the same with VIM
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-set-key (kbd "<f5>") 'revert-buffer)
-(global-set-key (kbd "S-<up>") 'windmove-up)
-(global-set-key (kbd "S-<down>") 'windmove-down)
-(global-set-key (kbd "S-<right>") 'windmove-right)
-(global-set-key (kbd "S-<left>") 'windmove-left)
-
-
+(setq gdb-many-windows 1)
+(setq split-height-threshold nil)
+(setq split-width-threshold 0)
 ;; show line number
 (global-display-line-numbers-mode t)
 (dolist (mode '(shell-mode-hook
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 
 ;;Initialize package sources
 (require 'package)
@@ -151,7 +147,7 @@
 ("C-c p" . projectile-command-map)
 :init
 (when (file-directory-p "~/projects")
-    (setq projectile-project-search-path '("~/projects")))
+  (setq projectile-project-search-path '("~/projects")))
 (setq projectile-switch-project-action #'projectile-dired))
 
 ;; git
@@ -178,7 +174,8 @@
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
   :custom(lsp-ui-doc-po))
-;;
+;; treemacs
+(use-package treemacs)
 (use-package  lsp-treemacs
   :after lsp)
 (use-package treemacs-evil
@@ -187,6 +184,7 @@
 (use-package treemacs-projectile
   :after (treemacs projectile)
   :ensure t)
+(setq treemacs-width 20)
 ;; company
 (use-package company
   :after lsp-mode
@@ -226,6 +224,49 @@
             (indent-for-tab-command)))))
 (global-set-key (kbd "M-/") 'tab-indent-or-complete)
 
-;; Ace windows
-;;(use-package ace-window)
-;;(global-set-key (kbd "M-o") 'ace-window)
+;; multiple line, usage C-d
+(use-package evil-multiedit)
+(evil-multiedit-default-keybinds)
+
+
+(use-package undo-tree
+  :ensure t
+  :after evil
+  :diminish
+  :config
+  (evil-set-undo-system 'undo-tree)
+  (global-undo-tree-mode 1))
+;;  windows control
+(use-package winum
+  :ensure t)
+(global-set-key  (kbd "M-0") 'treemacs-select-window)
+(global-set-key  (kbd "M-1") 'winum-select-window-1)
+(global-set-key  (kbd "M-2") 'winum-select-window-2)
+(global-set-key  (kbd "M-3") 'winum-select-window-3)
+(global-set-key  (kbd "M-4") 'winum-select-window-4)
+(global-set-key  (kbd "M-5") 'winum-select-window-5)
+(global-set-key  (kbd "M-6") 'winum-select-window-6)
+(global-set-key  (kbd "M-7") 'winum-select-window-7)
+(global-set-key  (kbd "M-8") 'winum-select-window-8)
+(winum-mode)
+
+
+
+;; winner mode for save window layouts
+(use-package winnder-mode
+  :ensure nil
+  :bind (:map evil-window-map
+	      ("u" . winner-undo)
+	      ("U" . winner-redo))
+  :config
+  (winner-mode))
+
+;; diminish 
+(use-package diminish)
+(diminish 'company-mode)
+(diminish 'ivy-mode)
+(diminish 'flycheck-mode)
+(diminish 'yas-minor-mode)
+(diminish 'company-mode)
+
+
