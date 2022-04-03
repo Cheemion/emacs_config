@@ -13,11 +13,15 @@
 (setq gdb-many-windows 1)
 (setq split-height-threshold nil)
 (setq split-width-threshold 0)
+(electric-pair-mode 1)
 ;; show line number
 (global-display-line-numbers-mode t)
 (dolist (mode '(shell-mode-hook
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+;; open shell the current window
+(add-to-list 'display-buffer-alist
+             '("^\\*shell\\*$" . (display-buffer-same-window)))
 
 
 ;;Initialize package sources
@@ -253,7 +257,7 @@
 
 
 ;; winner mode for save window layouts
-(use-package winnder-mode
+(use-package winner-mode
   :ensure nil
   :bind (:map evil-window-map
 	      ("u" . winner-undo)
