@@ -188,7 +188,7 @@
 (use-package treemacs-projectile
   :after (treemacs projectile)
   :ensure t)
-(setq treemacs-width 20)
+(setq treemacs-width 24)
 ;; company
 (use-package company
   :after lsp-mode
@@ -264,7 +264,7 @@
 	      ("U" . winner-redo))
   :config
   (winner-mode))
-
+(setq winner-mode t)
 ;; diminish 
 (use-package diminish)
 (diminish 'company-mode)
@@ -272,5 +272,4 @@
 (diminish 'flycheck-mode)
 (diminish 'yas-minor-mode)
 (diminish 'company-mode)
-
-
+;;
