@@ -246,7 +246,7 @@
 ;;  windows control
 (use-package winum
   :ensure t)
-(global-set-key  (kbd "M-0") 'treemacs-select-window)
+(global-set-key  (kbd "M-0") 'treemacs)
 (global-set-key  (kbd "M-1") 'winum-select-window-1)
 (global-set-key  (kbd "M-2") 'winum-select-window-2)
 (global-set-key  (kbd "M-3") 'winum-select-window-3)
