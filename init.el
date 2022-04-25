@@ -18,7 +18,7 @@
 (global-display-line-numbers-mode t)
 (dolist (mode '(shell-mode-hook
 		eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+(add-hook mode (lambda () (display-line-numbers-mode 0))))
 ;; open shell the current window
 (add-to-list 'display-buffer-alist
              '("^\\*shell\\*$" . (display-buffer-same-window)))
@@ -27,6 +27,11 @@
 (global-set-key (kbd "<C-left>") 'shrink-window-horizontally)
 (global-set-key (kbd "<C-right>") 'enlarge-window-horizontally)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(defun my-c++-mode-hook ()
+  (setq c-basic-offset 4)
+  (c-set-offset 'substatement-open 0))
+(add-hook 'c++-mode-hook 'my-c++-mode-hook)
+
 ;;Initialize package sources
 (require 'package)
 (setq package-archives '(("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
