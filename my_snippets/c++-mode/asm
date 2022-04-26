@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: asm
+# key: <asm
+# --
+__asm__ volatile(${1:assembler}
+		:${2: output}
+		:${3: input}
+		:${4:clobberedlist});
+$0
+		     
