@@ -1,4 +1,4 @@
-;;; init file
+;;; init file yes it is
 (setq inhibit-startup-message t)
 (scroll-bar-mode -1) ; Disble visible scrollbar
 (tool-bar-mode 1)
