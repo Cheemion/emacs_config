@@ -1,2 +1,2 @@
 # emacs_config
-Kim's emacs config
+Kim's emacs config XD
